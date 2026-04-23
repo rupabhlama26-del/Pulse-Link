@@ -1,13 +1,17 @@
 const bcrypt = require("bcryptjs");
-const { query, pool } = require("../config/db");
 const { calculateEligibility } = require("../utils/eligibility");
+const fileDb = require("../config/fileDb");
 
 function normalizeNullable(value) {
   return value === undefined || value === null || value === "" ? null : value;
 }
 
+function normalizeEmail(email) {
+  return String(email || "").trim().toLowerCase();
+}
+
 function isValidEmail(email) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(email || "").trim());
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizeEmail(email));
 }
 
 function validateRegistration(payload) {
@@ -34,72 +38,81 @@ function validateRegistration(payload) {
   }
 }
 
-async function createUser(payload) {
-  validateRegistration(payload);
+async function comparePassword(inputPassword, storedPassword) {
+  if (!storedPassword) {
+    return false;
+  }
 
-  const connection = await pool.getConnection();
+  if (String(storedPassword) === String(inputPassword)) {
+    return true;
+  }
+
+  if (!String(storedPassword).startsWith("$2")) {
+    return false;
+  }
+
   try {
-    await connection.beginTransaction();
-
-    const hashedPassword = await bcrypt.hash(payload.password, 10);
-    const [userResult] = await connection.execute(
-      "INSERT INTO users (name, email, password, role, phone) VALUES (?, ?, ?, ?, ?)",
-      [payload.name, payload.email, hashedPassword, payload.role, payload.phone]
-    );
-
-    const userId = userResult.insertId;
-
-    if (payload.role === "donor") {
-      const donorDetails = {
-        age: payload.age,
-        weight: payload.weight,
-        health_conditions: payload.health_conditions || "",
-        last_donation_date: payload.last_donation_date || null
-      };
-      const eligibility = calculateEligibility(donorDetails);
-
-      await connection.execute(
-        `INSERT INTO donors
-        (user_id, blood_group, age, weight, health_conditions, last_donation_date, eligibility_status, next_eligible_date, address, is_available)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-        [
-          userId,
-          payload.blood_group,
-          Number(payload.age),
-          Number(payload.weight),
-          payload.health_conditions || "",
-          normalizeNullable(payload.last_donation_date),
-          eligibility.eligible ? "Eligible" : "Not Eligible",
-          normalizeNullable(eligibility.nextEligibleDate),
-          payload.address || "",
-          1
-        ]
-      );
-    }
-
-    if (payload.role === "patient") {
-      await connection.execute(
-        "INSERT INTO patients (user_id, required_blood_group, address, hospital_name) VALUES (?, ?, ?, ?)",
-        [
-          userId,
-          normalizeNullable(payload.required_blood_group),
-          payload.address || "",
-          normalizeNullable(payload.hospital_name)
-        ]
-      );
-    }
-
-    await connection.commit();
-    return userId;
-  } catch (error) {
-    await connection.rollback();
-    throw error;
-  } finally {
-    connection.release();
+    return await bcrypt.compare(String(inputPassword), String(storedPassword));
+  } catch (_error) {
+    return false;
   }
 }
 
-async function loginUser(email, password) {
+async function createUser(payload) {
+  validateRegistration(payload);
+
+  const normalizedEmail = normalizeEmail(payload.email);
+  if (fileDb.getUserByEmail(normalizedEmail)) {
+    const error = new Error("Email already exists.");
+    error.code = "ER_DUP_ENTRY";
+    error.status = 409;
+    throw error;
+  }
+
+  const user = fileDb.createUser({
+    name: payload.name,
+    email: normalizedEmail,
+    password: String(payload.password),
+    role: payload.role,
+    phone: payload.phone
+  });
+
+  if (payload.role === "donor") {
+    const donorDetails = {
+      age: payload.age,
+      weight: payload.weight,
+      health_conditions: payload.health_conditions || "",
+      last_donation_date: payload.last_donation_date || null
+    };
+    const eligibility = calculateEligibility(donorDetails);
+
+    fileDb.createDonor({
+      user_id: user.id,
+      blood_group: payload.blood_group,
+      age: Number(payload.age),
+      weight: Number(payload.weight),
+      health_conditions: payload.health_conditions || "",
+      last_donation_date: normalizeNullable(payload.last_donation_date),
+      eligibility_status: eligibility.eligible ? "Eligible" : "Not Eligible",
+      next_eligible_date: normalizeNullable(eligibility.nextEligibleDate),
+      address: payload.address || "",
+      is_available: 1
+    });
+  }
+
+  if (payload.role === "patient") {
+    fileDb.createPatient({
+      user_id: user.id,
+      required_blood_group: normalizeNullable(payload.required_blood_group),
+      address: payload.address || "",
+      hospital_name: normalizeNullable(payload.hospital_name)
+    });
+  }
+
+  return user.id;
+}
+
+async function loginUser(email, password, role) {
   if (!email || !password) {
     throw Object.assign(new Error("Email and password are required."), { status: 400 });
   }
@@ -108,16 +121,20 @@ async function loginUser(email, password) {
     throw Object.assign(new Error("Please enter a valid email address."), { status: 400 });
   }
 
-  const rows = await query("SELECT id, name, email, password, role FROM users WHERE email = ?", [email]);
-  const user = rows[0];
+  const normalizedEmail = normalizeEmail(email);
+  const user = fileDb.getUserByEmail(normalizedEmail);
 
   if (!user) {
-    throw Object.assign(new Error("No account found with this email address."), { status: 404 });
+    throw Object.assign(new Error("Role, email, or password does not match."), { status: 401 });
   }
 
-  const isValid = await bcrypt.compare(password, user.password);
-  if (!isValid) {
-    throw Object.assign(new Error("Incorrect password. Please try again."), { status: 401 });
+  if (role && user.role !== role) {
+    throw Object.assign(new Error("Role, email, or password does not match."), { status: 401 });
+  }
+
+  const isValidPassword = await comparePassword(password, user.password);
+  if (!isValidPassword) {
+    throw Object.assign(new Error("Role, email, or password does not match."), { status: 401 });
   }
 
   return {

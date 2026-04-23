@@ -1,17 +1,23 @@
-const { query } = require("../config/db");
+const fileDb = require("../config/fileDb");
 const { pushEvent } = require("../utils/notificationStore");
 
 async function createNotification(userId, message, type = "info") {
-  await query(
-    "INSERT INTO notifications (user_id, message, type) VALUES (?, ?, ?)",
-    [userId, message, type]
-  );
-
-  pushEvent(userId, "notification", {
+  const notification = fileDb.createNotification({
+    user_id: Number(userId),
     message,
     type,
-    createdAt: new Date().toISOString()
+    is_read: 0
   });
+
+  pushEvent(userId, "notification", {
+    id: notification.id,
+    message,
+    type,
+    is_read: 0,
+    createdAt: notification.created_at
+  });
+
+  return notification;
 }
 
 async function broadcastNotification(userIds, message, type = "broadcast") {

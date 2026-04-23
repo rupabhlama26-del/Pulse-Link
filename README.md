@@ -5,7 +5,7 @@ PulseLink is a full-stack blood bank management web application for a college pr
 ## Features
 
 - Donor, patient, and admin roles
-- JWT authentication with password hashing
+- Database authentication with password hashing
 - Donor eligibility check based on age, weight, health history, and 90-day donation interval
 - Blood-group-based donor search with live availability
 - Emergency request mode with live in-app notifications

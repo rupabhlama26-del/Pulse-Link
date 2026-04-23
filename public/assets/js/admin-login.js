@@ -171,7 +171,7 @@ function initAdminLogin() {
 
       const response = await apiFetch("/auth/login", {
         method: "POST",
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify({ email, password, role: "admin" })
       });
 
       if (response.user.role !== "admin") {

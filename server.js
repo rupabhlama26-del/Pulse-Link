@@ -12,7 +12,7 @@ const metaRoutes = require("./src/routes/meta.routes");
 const notificationRoutes = require("./src/routes/notification.routes");
 const chatRoutes = require("./src/routes/chat.routes");
 const { attachUserIfPresent } = require("./src/middleware/auth.middleware");
-const { initDatabase } = require("./src/config/db");
+const fileDb = require("./src/config/fileDb");
 
 const app = express();
 const PREFERRED_PORT = Number(process.env.PORT || 4500);
@@ -69,14 +69,16 @@ app.use((err, _req, res, _next) => {
   });
 });
 
-initDatabase()
-  .then(async () => {
+(async () => {
+  try {
+    fileDb.initializeData();
     const port = await findAvailablePort(PREFERRED_PORT);
     app.listen(port, () => {
-      console.log(`Blood Bank app running at http://localhost:${port}`);
+      console.log(`\nPulse-Link app running at http://localhost:${port}`);
+      console.log("Data is stored in the local /data folder as JSON files.\n");
     });
-  })
-  .catch((error) => {
-    console.error("Failed to initialize database:", error.message);
+  } catch (error) {
+    console.error("Failed to start server:", error.message);
     process.exit(1);
-  });
+  }
+})();

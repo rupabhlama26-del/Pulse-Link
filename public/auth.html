@@ -1,95 +1,114 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-    <meta http-equiv="Pragma" content="no-cache" />
-    <meta http-equiv="Expires" content="0" />
-    <title>Authentication | PulseLink</title>
-    <script>
-      (function () {
-        if (window.location.protocol !== "file:") return;
-        const appPath = window.location.pathname.replace(/^.*\/public/, "") || "/auth.html";
-        const nextUrl = `http://localhost:4500${appPath}${window.location.search}${window.location.hash}`;
-        window.location.replace(nextUrl);
-      })();
-    </script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="./assets/css/styles.css" />
-  </head>
-  <body class="page-shell min-h-screen bg-slate-950 text-white">
-    <main class="mx-auto max-w-6xl px-6 py-14">
-      <div class="grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
-        <section class="glass-card p-8">
-          <p class="section-label">Secure access</p>
-          <h1 id="authHeading" class="mt-3 text-4xl font-black">Welcome</h1>
-          <p id="authSubheading" class="mt-4 text-slate-300">
-            Register or login to continue with secure role-based access.
-          </p>
-          <div class="mt-8 space-y-4 text-sm text-slate-300">
-            <div class="mini-info-card">JWT authentication and password hashing</div>
-            <div class="mini-info-card">Blood-group-based donor-patient matching</div>
-            <div class="mini-info-card">Live notifications and eligibility reminders</div>
-          </div>
-        </section>
 
-        <section class="glass-card p-8">
-          <div class="mb-6 flex gap-3">
-            <button id="loginTabLink" class="tab-btn active" data-tab="login">Login</button>
-            <button id="registerTabLink" class="tab-btn" data-tab="register">Register</button>
-          </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <title>Authentication | PulseLink</title>
+  <script>
+    (function () {
+      if (window.location.protocol !== "file:") return;
+      const appPath = window.location.pathname.replace(/^.*\/public/, "") || "/auth.html";
+      const nextUrl = `http://localhost:4500${appPath}${window.location.search}${window.location.hash}`;
+      window.location.replace(nextUrl);
+    })();
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="./assets/css/styles.css" />
+</head>
 
-          <form id="loginForm" class="tab-panel space-y-4" method="post" action="javascript:void(0);">
+<body class="page-shell min-h-screen bg-slate-950 text-white">
+  <main class="mx-auto max-w-6xl px-6 py-14">
+    <div class="grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
+      <section class="glass-card p-8">
+        <p class="section-label">Secure access</p>
+        <h1 id="authHeading" class="mt-3 text-4xl font-black">Welcome</h1>
+        <p id="authSubheading" class="mt-4 text-slate-300">
+          Register or login to continue with secure role-based access.
+        </p>
+        <div class="mt-8 space-y-4 text-sm text-slate-300">
+          <div class="mini-info-card">Simple local-folder login with JSON data storage</div>
+          <div class="mini-info-card">Blood-group-based donor-patient matching</div>
+          <div class="mini-info-card">Live notifications and eligibility reminders</div>
+        </div>
+      </section>
+
+      <section class="glass-card p-8">
+        <div class="mb-6 flex gap-3">
+          <button id="loginTabLink" class="tab-btn active" data-tab="login">Login</button>
+          <button id="registerTabLink" class="tab-btn" data-tab="register">Register</button>
+        </div>
+
+        <form id="loginForm" class="tab-panel space-y-4" method="post" action="javascript:void(0);">
+          <input class="input-field" type="email" name="email" placeholder="Email" required />
+          <input class="input-field" type="password" name="password" placeholder="Password" required />
+          <button class="primary-btn w-full" type="submit">Login</button>
+          <button id="forgotPasswordBtn" class="w-full text-sm text-slate-300 underline underline-offset-4"
+            type="button">Forgot Password</button>
+        </form>
+
+        <form id="registerForm" class="tab-panel hidden space-y-4" method="post" action="javascript:void(0);">
+          <div class="grid gap-4 md:grid-cols-2">
+            <input class="input-field" type="text" name="name" placeholder="Full Name" required />
             <input class="input-field" type="email" name="email" placeholder="Email" required />
             <input class="input-field" type="password" name="password" placeholder="Password" required />
-            <button class="primary-btn w-full" type="submit">Login</button>
-            <button id="forgotPasswordBtn" class="w-full text-sm text-slate-300 underline underline-offset-4" type="button">Forgot Password</button>
-          </form>
-
-          <form id="registerForm" class="tab-panel hidden space-y-4" method="post" action="javascript:void(0);">
-            <div class="grid gap-4 md:grid-cols-2">
-              <input class="input-field" type="text" name="name" placeholder="Full Name" required />
-              <input class="input-field" type="email" name="email" placeholder="Email" required />
-              <input class="input-field" type="password" name="password" placeholder="Password" required />
-              <input class="input-field" type="text" name="phone" placeholder="Phone Number" required />
-            </div>
-
-            <div id="donorFields" class="grid gap-4 md:grid-cols-2">
-              <input class="input-field" type="number" name="age" placeholder="Age" />
-              <input class="input-field" type="number" name="weight" placeholder="Weight (kg)" />
-              <select class="input-field" name="blood_group">
-                <option value="">Select Blood Group</option>
-                <option>A+</option><option>A-</option><option>B+</option><option>B-</option>
-                <option>AB+</option><option>AB-</option><option>O+</option><option>O-</option>
-              </select>
-              <input class="input-field" type="date" name="last_donation_date" />
-            </div>
-
-            <div id="patientFields" class="hidden grid gap-4 md:grid-cols-2">
-              <select class="input-field" name="required_blood_group">
-                <option value="">Required Blood Group</option>
-                <option>A+</option><option>A-</option><option>B+</option><option>B-</option>
-                <option>AB+</option><option>AB-</option><option>O+</option><option>O-</option>
-              </select>
-              <input class="input-field" type="text" name="hospital_name" placeholder="Hospital Name" />
-            </div>
-
-            <textarea class="input-field min-h-[110px]" name="health_conditions" placeholder="Medical History / Health Conditions"></textarea>
-            <input class="input-field" type="text" name="address" placeholder="Address" required />
-            <button class="primary-btn w-full" type="submit">Create Account</button>
-          </form>
-
-          <div id="forgotPasswordPanel" class="mt-6 hidden rounded-3xl border border-white/10 bg-white/5 p-5">
-            <h3 class="text-xl font-semibold">Forgot Password</h3>
-            <p class="mt-2 text-sm text-slate-300">College-project demo: simulate OTP verification and contact admin support for reset approval.</p>
+            <input class="input-field" type="text" name="phone" placeholder="Phone Number" required />
           </div>
 
-          <div id="authMessage" class="mt-5 rounded-2xl border border-red-400/20 bg-red-500/10 px-4 py-3 text-sm text-red-100 hidden"></div>
-        </section>
-      </div>
-    </main>
-    <script src="./assets/js/app.js?v=11"></script>
-    <script src="./assets/js/auth.js?v=19"></script>
-  </body>
+          <div id="donorFields" class="grid gap-4 md:grid-cols-2">
+            <input class="input-field" type="number" name="age" placeholder="Age" />
+            <input class="input-field" type="number" name="weight" placeholder="Weight (kg)" />
+            <select class="input-field" name="blood_group">
+              <option value="">Select Blood Group</option>
+              <option>A+</option>
+              <option>A-</option>
+              <option>B+</option>
+              <option>B-</option>
+              <option>AB+</option>
+              <option>AB-</option>
+              <option>O+</option>
+              <option>O-</option>
+            </select>
+            <input class="input-field" type="date" name="last_donation_date" />
+          </div>
+
+          <div id="patientFields" class="hidden grid gap-4 md:grid-cols-2">
+            <select class="input-field" name="required_blood_group">
+              <option value="">Required Blood Group</option>
+              <option>A+</option>
+              <option>A-</option>
+              <option>B+</option>
+              <option>B-</option>
+              <option>AB+</option>
+              <option>AB-</option>
+              <option>O+</option>
+              <option>O-</option>
+            </select>
+            <input class="input-field" type="text" name="hospital_name" placeholder="Hospital Name" />
+          </div>
+
+          <textarea class="input-field min-h-[110px]" name="health_conditions"
+            placeholder="Medical History / Health Conditions"></textarea>
+          <input class="input-field" type="text" name="address" placeholder="Address" required />
+          <button class="primary-btn w-full" type="submit">Create Account</button>
+        </form>
+
+        <div id="forgotPasswordPanel" class="mt-6 hidden rounded-3xl border border-white/10 bg-white/5 p-5">
+          <h3 class="text-xl font-semibold">Forgot Password</h3>
+          <p class="mt-2 text-sm text-slate-300">College-project demo: simulate OTP verification and contact admin
+            support for reset approval.</p>
+        </div>
+
+        <div id="authMessage"
+          class="mt-5 rounded-2xl border border-red-400/20 bg-red-500/10 px-4 py-3 text-sm text-red-100 hidden"></div>
+      </section>
+    </div>
+  </main>
+  <script src="./assets/js/app.js?v=11"></script>
+  <script src="./assets/js/auth.js?v=19"></script>
+</body>
+
 </html>

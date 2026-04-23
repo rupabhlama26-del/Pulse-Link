@@ -220,7 +220,7 @@ async function handleLogin(event) {
   try {
     const response = await apiFetch("/auth/login", {
       method: "POST",
-      body: JSON.stringify({ email, password })
+      body: JSON.stringify({ email, password, role })
     });
 
     setSession(response.user);
@@ -265,7 +265,8 @@ async function handleRegister(event, role) {
       method: "POST",
       body: JSON.stringify({
         email: payload.email,
-        password: payload.password
+        password: payload.password,
+        role
       })
     });
 

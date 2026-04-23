@@ -1,0 +1,426 @@
+[
+  {
+    "id": 1,
+    "is_read": 0,
+    "user_id": 2,
+    "message": "best of luck ",
+    "type": "broadcast",
+    "created_at": "2026-04-23T20:37:45.296Z"
+  },
+  {
+    "id": 2,
+    "is_read": 0,
+    "user_id": 3,
+    "message": "best of luck ",
+    "type": "broadcast",
+    "created_at": "2026-04-23T20:37:45.297Z"
+  },
+  {
+    "id": 4,
+    "is_read": 0,
+    "user_id": 6,
+    "message": "best of luck ",
+    "type": "broadcast",
+    "created_at": "2026-04-23T20:37:45.301Z"
+  },
+  {
+    "id": 5,
+    "is_read": 0,
+    "user_id": 8,
+    "message": "best of luck ",
+    "type": "broadcast",
+    "created_at": "2026-04-23T20:37:45.302Z"
+  },
+  {
+    "id": 6,
+    "is_read": 0,
+    "user_id": 9,
+    "message": "best of luck ",
+    "type": "broadcast",
+    "created_at": "2026-04-23T20:37:45.302Z"
+  },
+  {
+    "id": 7,
+    "is_read": 0,
+    "user_id": 10,
+    "message": "best of luck ",
+    "type": "broadcast",
+    "created_at": "2026-04-23T20:37:45.304Z"
+  },
+  {
+    "id": 8,
+    "is_read": 0,
+    "user_id": 11,
+    "message": "best of luck ",
+    "type": "broadcast",
+    "created_at": "2026-04-23T20:37:45.305Z"
+  },
+  {
+    "id": 9,
+    "is_read": 0,
+    "user_id": 12,
+    "message": "best of luck ",
+    "type": "broadcast",
+    "created_at": "2026-04-23T20:37:45.308Z"
+  },
+  {
+    "id": 10,
+    "is_read": 0,
+    "user_id": 13,
+    "message": "best of luck ",
+    "type": "broadcast",
+    "created_at": "2026-04-23T20:37:45.311Z"
+  },
+  {
+    "id": 11,
+    "is_read": 0,
+    "user_id": 14,
+    "message": "best of luck ",
+    "type": "broadcast",
+    "created_at": "2026-04-23T20:37:45.313Z"
+  },
+  {
+    "id": 12,
+    "is_read": 0,
+    "user_id": 15,
+    "message": "best of luck ",
+    "type": "broadcast",
+    "created_at": "2026-04-23T20:37:45.315Z"
+  },
+  {
+    "id": 13,
+    "is_read": 0,
+    "user_id": 16,
+    "message": "best of luck ",
+    "type": "broadcast",
+    "created_at": "2026-04-23T20:37:45.316Z"
+  },
+  {
+    "id": 14,
+    "is_read": 0,
+    "user_id": 17,
+    "message": "best of luck ",
+    "type": "broadcast",
+    "created_at": "2026-04-23T20:37:45.317Z"
+  },
+  {
+    "id": 15,
+    "is_read": 0,
+    "user_id": 18,
+    "message": "best of luck ",
+    "type": "broadcast",
+    "created_at": "2026-04-23T20:37:45.317Z"
+  },
+  {
+    "id": 16,
+    "is_read": 0,
+    "user_id": 19,
+    "message": "best of luck ",
+    "type": "broadcast",
+    "created_at": "2026-04-23T20:37:45.319Z"
+  },
+  {
+    "id": 17,
+    "is_read": 0,
+    "user_id": 20,
+    "message": "best of luck ",
+    "type": "broadcast",
+    "created_at": "2026-04-23T20:37:45.320Z"
+  },
+  {
+    "id": 18,
+    "is_read": 0,
+    "user_id": 21,
+    "message": "best of luck ",
+    "type": "broadcast",
+    "created_at": "2026-04-23T20:37:45.320Z"
+  },
+  {
+    "id": 19,
+    "is_read": 0,
+    "user_id": 22,
+    "message": "best of luck ",
+    "type": "broadcast",
+    "created_at": "2026-04-23T20:37:45.321Z"
+  },
+  {
+    "id": 20,
+    "is_read": 0,
+    "user_id": 23,
+    "message": "best of luck ",
+    "type": "broadcast",
+    "created_at": "2026-04-23T20:37:45.323Z"
+  },
+  {
+    "id": 21,
+    "is_read": 0,
+    "user_id": 24,
+    "message": "best of luck ",
+    "type": "broadcast",
+    "created_at": "2026-04-23T20:37:45.324Z"
+  },
+  {
+    "id": 22,
+    "is_read": 0,
+    "user_id": 25,
+    "message": "best of luck ",
+    "type": "broadcast",
+    "created_at": "2026-04-23T20:37:45.327Z"
+  },
+  {
+    "id": 23,
+    "is_read": 0,
+    "user_id": 26,
+    "message": "best of luck ",
+    "type": "broadcast",
+    "created_at": "2026-04-23T20:37:45.328Z"
+  },
+  {
+    "id": 24,
+    "is_read": 0,
+    "user_id": 27,
+    "message": "best of luck ",
+    "type": "broadcast",
+    "created_at": "2026-04-23T20:37:45.331Z"
+  },
+  {
+    "id": 25,
+    "is_read": 0,
+    "user_id": 29,
+    "message": "best of luck ",
+    "type": "broadcast",
+    "created_at": "2026-04-23T20:37:45.334Z"
+  },
+  {
+    "id": 26,
+    "is_read": 0,
+    "user_id": 30,
+    "message": "best of luck ",
+    "type": "broadcast",
+    "created_at": "2026-04-23T20:37:45.335Z"
+  },
+  {
+    "id": 27,
+    "is_read": 0,
+    "user_id": 31,
+    "message": "best of luck ",
+    "type": "broadcast",
+    "created_at": "2026-04-23T20:37:45.337Z"
+  },
+  {
+    "id": 28,
+    "is_read": 0,
+    "user_id": 32,
+    "message": "best of luck ",
+    "type": "broadcast",
+    "created_at": "2026-04-23T20:37:45.341Z"
+  },
+  {
+    "id": 29,
+    "is_read": 0,
+    "user_id": 33,
+    "message": "best of luck ",
+    "type": "broadcast",
+    "created_at": "2026-04-23T20:37:45.343Z"
+  },
+  {
+    "id": 30,
+    "is_read": 0,
+    "user_id": 34,
+    "message": "best of luck ",
+    "type": "broadcast",
+    "created_at": "2026-04-23T20:37:45.345Z"
+  },
+  {
+    "id": 31,
+    "is_read": 0,
+    "user_id": 35,
+    "message": "best of luck ",
+    "type": "broadcast",
+    "created_at": "2026-04-23T20:37:45.347Z"
+  },
+  {
+    "id": 32,
+    "is_read": 0,
+    "user_id": 36,
+    "message": "best of luck ",
+    "type": "broadcast",
+    "created_at": "2026-04-23T20:37:45.348Z"
+  },
+  {
+    "id": 33,
+    "is_read": 0,
+    "user_id": 37,
+    "message": "best of luck ",
+    "type": "broadcast",
+    "created_at": "2026-04-23T20:37:45.350Z"
+  },
+  {
+    "id": 34,
+    "is_read": 0,
+    "user_id": 38,
+    "message": "best of luck ",
+    "type": "broadcast",
+    "created_at": "2026-04-23T20:37:45.353Z"
+  },
+  {
+    "id": 35,
+    "is_read": 0,
+    "user_id": 39,
+    "message": "best of luck ",
+    "type": "broadcast",
+    "created_at": "2026-04-23T20:37:45.355Z"
+  },
+  {
+    "id": 36,
+    "is_read": 0,
+    "user_id": 40,
+    "message": "best of luck ",
+    "type": "broadcast",
+    "created_at": "2026-04-23T20:37:45.357Z"
+  },
+  {
+    "id": 37,
+    "is_read": 0,
+    "user_id": 41,
+    "message": "best of luck ",
+    "type": "broadcast",
+    "created_at": "2026-04-23T20:37:45.360Z"
+  },
+  {
+    "id": 38,
+    "is_read": 0,
+    "user_id": 42,
+    "message": "best of luck ",
+    "type": "broadcast",
+    "created_at": "2026-04-23T20:37:45.361Z"
+  },
+  {
+    "id": 39,
+    "is_read": 0,
+    "user_id": 43,
+    "message": "best of luck ",
+    "type": "broadcast",
+    "created_at": "2026-04-23T20:37:45.363Z"
+  },
+  {
+    "id": 40,
+    "is_read": 0,
+    "user_id": 44,
+    "message": "best of luck ",
+    "type": "broadcast",
+    "created_at": "2026-04-23T20:37:45.366Z"
+  },
+  {
+    "id": 41,
+    "is_read": 0,
+    "user_id": 45,
+    "message": "best of luck ",
+    "type": "broadcast",
+    "created_at": "2026-04-23T20:37:45.368Z"
+  },
+  {
+    "id": 42,
+    "is_read": 0,
+    "user_id": 46,
+    "message": "best of luck ",
+    "type": "broadcast",
+    "created_at": "2026-04-23T20:37:45.371Z"
+  },
+  {
+    "id": 43,
+    "is_read": 0,
+    "user_id": 47,
+    "message": "best of luck ",
+    "type": "broadcast",
+    "created_at": "2026-04-23T20:37:45.373Z"
+  },
+  {
+    "id": 44,
+    "is_read": 0,
+    "user_id": 48,
+    "message": "best of luck ",
+    "type": "broadcast",
+    "created_at": "2026-04-23T20:37:45.374Z"
+  },
+  {
+    "id": 45,
+    "is_read": 0,
+    "user_id": 49,
+    "message": "best of luck ",
+    "type": "broadcast",
+    "created_at": "2026-04-23T20:37:45.376Z"
+  },
+  {
+    "id": 46,
+    "is_read": 0,
+    "user_id": 50,
+    "message": "best of luck ",
+    "type": "broadcast",
+    "created_at": "2026-04-23T20:37:45.377Z"
+  },
+  {
+    "id": 47,
+    "is_read": 0,
+    "user_id": 51,
+    "message": "best of luck ",
+    "type": "broadcast",
+    "created_at": "2026-04-23T20:37:45.379Z"
+  },
+  {
+    "id": 48,
+    "is_read": 0,
+    "user_id": 52,
+    "message": "best of luck ",
+    "type": "broadcast",
+    "created_at": "2026-04-23T20:37:45.380Z"
+  },
+  {
+    "id": 49,
+    "is_read": 0,
+    "user_id": 53,
+    "message": "best of luck ",
+    "type": "broadcast",
+    "created_at": "2026-04-23T20:37:45.392Z"
+  },
+  {
+    "id": 50,
+    "is_read": 0,
+    "user_id": 54,
+    "message": "best of luck ",
+    "type": "broadcast",
+    "created_at": "2026-04-23T20:37:45.393Z"
+  },
+  {
+    "id": 51,
+    "is_read": 0,
+    "user_id": 55,
+    "message": "best of luck ",
+    "type": "broadcast",
+    "created_at": "2026-04-23T20:37:45.395Z"
+  },
+  {
+    "id": 52,
+    "is_read": 0,
+    "user_id": 56,
+    "message": "best of luck ",
+    "type": "broadcast",
+    "created_at": "2026-04-23T20:37:45.397Z"
+  },
+  {
+    "id": 53,
+    "is_read": 0,
+    "user_id": 57,
+    "message": "best of luck ",
+    "type": "broadcast",
+    "created_at": "2026-04-23T20:37:45.398Z"
+  },
+  {
+    "id": 54,
+    "is_read": 0,
+    "user_id": 58,
+    "message": "best of luck ",
+    "type": "broadcast",
+    "created_at": "2026-04-23T20:37:45.401Z"
+  }
+]

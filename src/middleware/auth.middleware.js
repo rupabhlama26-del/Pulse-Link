@@ -1,4 +1,4 @@
-const { query } = require("../config/db");
+const fileDb = require("../config/fileDb");
 
 function parseCookies(cookieHeader = "") {
   return cookieHeader
@@ -63,24 +63,20 @@ function attachUserIfPresent(req, _res, next) {
     return next();
   }
 
-  query("SELECT id, name, email, role FROM users WHERE id = ? LIMIT 1", [identity.id])
-    .then((rows) => {
-      const user = rows[0];
+  const user = fileDb.getUserById(identity.id);
 
-      if (!user) {
-        req.user = null;
-        return next();
-      }
+  if (!user) {
+    req.user = null;
+    return next();
+  }
 
-      if (identity.role && identity.role !== user.role) {
-        req.user = null;
-        return next();
-      }
+  if (identity.role && identity.role !== user.role) {
+    req.user = null;
+    return next();
+  }
 
-      req.user = user;
-      return next();
-    })
-    .catch(next);
+  req.user = user;
+  return next();
 }
 
 function requireAuth(req, res, next) {

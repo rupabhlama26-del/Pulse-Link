@@ -1,5 +1,5 @@
 const express = require("express");
-const { query } = require("../config/db");
+const fileDb = require("../config/fileDb");
 const { requireAuth } = require("../middleware/auth.middleware");
 const { addClient, removeClient } = require("../utils/notificationStore");
 
@@ -9,11 +9,8 @@ router.use(requireAuth);
 
 router.get("/", async (req, res, next) => {
   try {
-    const rows = await query(
-      "SELECT id, message, type, is_read, created_at FROM notifications WHERE user_id = ? ORDER BY created_at DESC",
-      [req.user.id]
-    );
-    res.json({ success: true, notifications: rows });
+    const notifications = fileDb.getNotificationsByUserId(req.user.id);
+    res.json({ success: true, notifications });
   } catch (error) {
     next(error);
   }
@@ -21,7 +18,7 @@ router.get("/", async (req, res, next) => {
 
 router.patch("/:id/read", async (req, res, next) => {
   try {
-    await query("UPDATE notifications SET is_read = 1 WHERE id = ? AND user_id = ?", [req.params.id, req.user.id]);
+    fileDb.markNotificationRead(req.params.id, req.user.id);
     res.json({ success: true, message: "Notification marked as read." });
   } catch (error) {
     next(error);
@@ -35,7 +32,7 @@ router.get("/stream/connect", (req, res) => {
   res.flushHeaders();
 
   addClient(req.user.id, res);
-  res.write(`event: connected\n`);
+  res.write("event: connected\n");
   res.write(`data: ${JSON.stringify({ message: "Live alerts enabled." })}\n\n`);
 
   req.on("close", () => {

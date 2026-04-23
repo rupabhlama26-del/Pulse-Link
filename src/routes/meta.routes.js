@@ -1,24 +1,21 @@
 const express = require("express");
-const { query } = require("../config/db");
+const fileDb = require("../config/fileDb");
 
 const router = express.Router();
 
 router.get("/stats", async (_req, res, next) => {
   try {
-    const [donors, patients, activeRequests, livesSaved] = await Promise.all([
-      query("SELECT COUNT(*) AS totalDonors FROM donors"),
-      query("SELECT COUNT(*) AS totalPatients FROM patients"),
-      query("SELECT COUNT(*) AS activeRequests FROM requests WHERE status IN ('Pending', 'Accepted')"),
-      query("SELECT COUNT(*) AS livesSaved FROM donations")
-    ]);
+    const activeRequests = fileDb
+      .getAllRequests()
+      .filter((request) => ["Pending", "Accepted"].includes(request.status)).length;
 
     res.json({
       success: true,
       stats: {
-        totalDonors: donors[0].totalDonors,
-        totalPatients: patients[0].totalPatients,
-        activeRequests: activeRequests[0].activeRequests,
-        livesSaved: livesSaved[0].livesSaved
+        totalDonors: fileDb.getAllDonors().length,
+        totalPatients: fileDb.getAllPatients().length,
+        activeRequests,
+        livesSaved: fileDb.getAllDonations().length
       }
     });
   } catch (error) {
@@ -28,15 +25,19 @@ router.get("/stats", async (_req, res, next) => {
 
 router.get("/blood-availability", async (_req, res, next) => {
   try {
-    const rows = await query(
-      `SELECT blood_group, COUNT(*) AS available_count
-       FROM donors
-       WHERE is_available = 1 AND eligibility_status = 'Eligible'
-       GROUP BY blood_group
-       ORDER BY available_count DESC`
-    );
+    const availabilityMap = fileDb
+      .getAllDonors()
+      .filter((donor) => Number(donor.is_available) === 1 && donor.eligibility_status === "Eligible")
+      .reduce((result, donor) => {
+        result[donor.blood_group] = (result[donor.blood_group] || 0) + 1;
+        return result;
+      }, {});
 
-    res.json({ success: true, availability: rows });
+    const availability = Object.entries(availabilityMap)
+      .map(([blood_group, available_count]) => ({ blood_group, available_count }))
+      .sort((left, right) => right.available_count - left.available_count);
+
+    res.json({ success: true, availability });
   } catch (error) {
     next(error);
   }

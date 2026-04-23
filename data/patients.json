@@ -1,0 +1,18 @@
+[
+  {
+    "id": 1,
+    "user_id": 3,
+    "required_blood_group": "O+",
+    "address": "456 Hospital Ave, City",
+    "hospital_name": "Central Hospital",
+    "created_at": "2026-04-24T00:00:00.000Z"
+  },
+  {
+    "id": 2,
+    "user_id": 6,
+    "required_blood_group": "B-",
+    "address": "Gandhiroad gali",
+    "hospital_name": "na",
+    "created_at": "2026-04-23T20:23:01.063Z"
+  }
+]

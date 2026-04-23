@@ -22,7 +22,7 @@ router.post("/register", async (req, res, next) => {
 
 router.post("/login", async (req, res, next) => {
   try {
-    const result = await loginUser(req.body.email, req.body.password);
+    const result = await loginUser(req.body.email, req.body.password, req.body.role);
     res.json({
       success: true,
       message: "Login successful.",

@@ -1,47 +1,67 @@
 const express = require("express");
-const { query } = require("../config/db");
+const fileDb = require("../config/fileDb");
 const { requireAuth, allowRoles } = require("../middleware/auth.middleware");
 const { calculateEligibility } = require("../utils/eligibility");
 
 const router = express.Router();
 
+const urgencyRank = {
+  Critical: 4,
+  High: 3,
+  Medium: 2,
+  Low: 1
+};
+
 router.use(requireAuth, allowRoles("donor"));
 
 router.get("/dashboard", async (req, res, next) => {
   try {
-    const donors = await query(
-      `SELECT u.name, u.email, u.phone, d.*
-       FROM donors d
-       JOIN users u ON u.id = d.user_id
-       WHERE d.user_id = ?`,
-      [req.user.id]
-    );
-    const donor = donors[0];
-    const eligibility = calculateEligibility(donor);
-    const matchingRequests = await query(
-      `SELECT r.id, r.blood_group, r.units_needed, r.urgency, r.status, r.hospital_location,
-              u.name AS patient_name, r.created_at
-       FROM requests r
-       JOIN patients p ON p.id = r.patient_id
-       JOIN users u ON u.id = p.user_id
-       WHERE r.status IN ('Pending', 'Accepted')
-         AND r.blood_group = ?
-       ORDER BY FIELD(r.urgency, 'Critical', 'High', 'Medium', 'Low'), r.created_at DESC`,
-      [donor.blood_group]
-    );
-    const donationHistory = await query(
-      "SELECT donation_date, donation_location FROM donations WHERE donor_id = ? ORDER BY donation_date DESC",
-      [req.user.id]
-    );
-    const notifications = await query(
-      "SELECT id, message, type, is_read, created_at FROM notifications WHERE user_id = ? ORDER BY created_at DESC LIMIT 8",
-      [req.user.id]
-    );
+    const donorRecord = fileDb.getDonorByUserId(req.user.id);
+    if (!donorRecord) {
+      throw Object.assign(new Error("Donor profile not found."), { status: 404 });
+    }
 
-    await query(
-      "UPDATE donors SET eligibility_status = ?, next_eligible_date = ? WHERE user_id = ?",
-      [eligibility.eligible ? "Eligible" : "Not Eligible", eligibility.nextEligibleDate, req.user.id]
-    );
+    const donor = {
+      ...donorRecord,
+      name: req.user.name,
+      email: req.user.email,
+      phone: req.user.phone
+    };
+
+    const eligibility = calculateEligibility(donor);
+    fileDb.updateDonorByUserId(req.user.id, {
+      eligibility_status: eligibility.eligible ? "Eligible" : "Not Eligible",
+      next_eligible_date: eligibility.nextEligibleDate
+    });
+
+    const nearbyRequests = fileDb
+      .getAllRequests()
+      .filter(
+        (request) =>
+          ["Pending", "Accepted"].includes(request.status) &&
+          request.blood_group === donor.blood_group
+      )
+      .map((request) => {
+        const patient = fileDb.getPatientById(request.patient_id);
+        const patientUser = patient ? fileDb.getUserById(patient.user_id) : null;
+        return {
+          ...request,
+          patient_name: patientUser?.name || "Patient"
+        };
+      })
+      .sort((left, right) => {
+        const urgencyDiff = (urgencyRank[right.urgency] || 0) - (urgencyRank[left.urgency] || 0);
+        if (urgencyDiff !== 0) {
+          return urgencyDiff;
+        }
+        return new Date(right.created_at || 0) - new Date(left.created_at || 0);
+      });
+
+    const donationHistory = fileDb
+      .getDonationsByDonorId(req.user.id)
+      .sort((left, right) => new Date(right.donation_date || 0) - new Date(left.donation_date || 0));
+
+    const notifications = fileDb.getNotificationsByUserId(req.user.id).slice(0, 8);
 
     res.json({
       success: true,
@@ -51,7 +71,7 @@ router.get("/dashboard", async (req, res, next) => {
         eligibility_message: eligibility.reason,
         next_eligible_date: eligibility.nextEligibleDate
       },
-      nearbyRequests: matchingRequests,
+      nearbyRequests,
       donationHistory,
       notifications
     });
@@ -63,24 +83,20 @@ router.get("/dashboard", async (req, res, next) => {
 router.put("/profile", async (req, res, next) => {
   try {
     const eligibility = calculateEligibility(req.body);
-    await query(
-      `UPDATE donors
-       SET blood_group = ?, age = ?, weight = ?, health_conditions = ?, last_donation_date = ?,
-           address = ?, eligibility_status = ?, next_eligible_date = ?
-       WHERE user_id = ?`,
-      [
-        req.body.blood_group,
-        req.body.age,
-        req.body.weight,
-        req.body.health_conditions || "",
-        req.body.last_donation_date || null,
-        req.body.address || "",
-        eligibility.eligible ? "Eligible" : "Not Eligible",
-        eligibility.nextEligibleDate,
-        req.user.id
-      ]
-    );
-    await query("UPDATE users SET name = ?, phone = ? WHERE id = ?", [req.body.name, req.body.phone, req.user.id]);
+    fileDb.updateDonorByUserId(req.user.id, {
+      blood_group: req.body.blood_group,
+      age: Number(req.body.age),
+      weight: Number(req.body.weight),
+      health_conditions: req.body.health_conditions || "",
+      last_donation_date: req.body.last_donation_date || null,
+      address: req.body.address || "",
+      eligibility_status: eligibility.eligible ? "Eligible" : "Not Eligible",
+      next_eligible_date: eligibility.nextEligibleDate
+    });
+    fileDb.updateUser(req.user.id, {
+      name: req.body.name,
+      phone: req.body.phone
+    });
 
     res.json({
       success: true,
@@ -94,7 +110,9 @@ router.put("/profile", async (req, res, next) => {
 
 router.patch("/availability", async (req, res, next) => {
   try {
-    await query("UPDATE donors SET is_available = ? WHERE user_id = ?", [req.body.is_available ? 1 : 0, req.user.id]);
+    fileDb.updateDonorByUserId(req.user.id, {
+      is_available: req.body.is_available ? 1 : 0
+    });
     res.json({ success: true, message: "Availability updated." });
   } catch (error) {
     next(error);
@@ -103,14 +121,24 @@ router.patch("/availability", async (req, res, next) => {
 
 router.post("/history", async (req, res, next) => {
   try {
-    await query(
-      "INSERT INTO donations (donor_id, donation_date, donation_location) VALUES (?, ?, ?)",
-      [req.user.id, req.body.donation_date, req.body.donation_location]
-    );
-    await query(
-      "UPDATE donors SET last_donation_date = ? WHERE user_id = ?",
-      [req.body.donation_date, req.user.id]
-    );
+    fileDb.createDonation({
+      donor_id: Number(req.user.id),
+      donation_date: req.body.donation_date,
+      donation_location: req.body.donation_location
+    });
+
+    const donor = fileDb.getDonorByUserId(req.user.id);
+    const eligibility = calculateEligibility({
+      ...donor,
+      last_donation_date: req.body.donation_date
+    });
+
+    fileDb.updateDonorByUserId(req.user.id, {
+      last_donation_date: req.body.donation_date,
+      eligibility_status: eligibility.eligible ? "Eligible" : "Not Eligible",
+      next_eligible_date: eligibility.nextEligibleDate
+    });
+
     res.status(201).json({ success: true, message: "Donation history added." });
   } catch (error) {
     next(error);

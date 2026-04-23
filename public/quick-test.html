@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Blood Bank - Quick Test</title>
+    <style>
+        body { font-family: Arial; padding: 20px; background: #f0f0f0; }
+        .container { background: white; padding: 20px; border-radius: 8px; max-width: 500px; margin: 0 auto; }
+        button { padding: 10px 20px; margin: 5px; cursor: pointer; font-size: 16px; }
+        button:hover { background: #e0e0e0; }
+        .section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        .success { color: green; }
+        .error { color: red; }
+        .info { color: blue; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🩸 Blood Bank - Quick Test</h1>
+        
+        <div class="section">
+            <h3>Test 1: JavaScript Loading</h3>
+            <p id="test1">Checking...</p>
+            <button onclick="testJS()">Test JavaScript</button>
+        </div>
+        
+        <div class="section">
+            <h3>Test 2: API Connection</h3>
+            <p id="test2">Not tested yet</p>
+            <button onclick="testAPI()">Test API</button>
+        </div>
+        
+        <div class="section">
+            <h3>Test 3: Login Flow</h3>
+            <input type="email" id="email" placeholder="Email" value="donor1@pulselink.com">
+            <input type="password" id="password" placeholder="Password" value="password">
+            <button onclick="testLogin()">Test Login</button>
+            <p id="test3">Not tested yet</p>
+        </div>
+        
+        <div class="section">
+            <h3>Test 4: Role Detection</h3>
+            <p id="test4">Not tested yet</p>
+            <button onclick="detectRole()">Detect Role</button>
+        </div>
+        
+        <div class="section">
+            <h3>Direct Links</h3>
+            <a href="/select-role.html" style="display: block; margin: 10px 0;">Go to Role Selection</a>
+            <a href="/auth.html?role=donor" style="display: block; margin: 10px 0;">Go to Donor Auth</a>
+            <a href="/auth.html?role=patient" style="display: block; margin: 10px 0;">Go to Patient Auth</a>
+        </div>
+    </div>
+    
+    <script>
+        function log(elementId, message, type = "info") {
+            const el = document.getElementById(elementId);
+            el.textContent = message;
+            el.className = type;
+        }
+        
+        function testJS() {
+            log("test1", "✅ JavaScript is working!", "success");
+            alert("JS Test: Working!");
+        }
+        
+        async function testAPI() {
+            try {
+                const response = await fetch("/api/auth/login", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email: "donor1@pulselink.com", password: "password" })
+                });
+                const data = await response.json();
+                log("test2", "✅ API Response: " + (data.user ? "User: " + data.user.name + ", Role: " + data.user.role : "Error"), "success");
+            } catch (e) {
+                log("test2", "❌ API Error: " + e.message, "error");
+            }
+        }
+        
+        async function testLogin() {
+            try {
+                const email = document.getElementById("email").value;
+                const password = document.getElementById("password").value;
+                
+                const response = await fetch("/api/auth/login", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email, password })
+                });
+                
+                if (!response.ok) {
+                    throw new Error("Login failed");
+                }
+                
+                const data = await response.json();
+                log("test3", "✅ Login Success!\nName: " + data.user.name + "\nRole: " + data.user.role + "\nEmail: " + data.user.email, "success");
+            } catch (e) {
+                log("test3", "❌ Login Error: " + e.message, "error");
+            }
+        }
+        
+        function detectRole() {
+            const params = new URLSearchParams(window.location.search);
+            const role = params.get("role") || "none";
+            log("test4", "URL Role Parameter: " + role, "info");
+        }
+        
+        // Auto-test on load
+        window.addEventListener("load", () => {
+            testJS();
+        });
+    </script>
+</body>
+</html>

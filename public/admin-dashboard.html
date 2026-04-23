@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <title>Admin Dashboard | PulseLink</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/assets/css/styles.css" />
+  </head>
+  <body class="page-shell bg-slate-950 text-white">
+    <main class="mx-auto max-w-7xl px-6 py-10">
+      <div class="dashboard-topbar">
+        <div>
+          <p class="section-label">Admin panel</p>
+          <h1 class="mt-2 text-4xl font-black">System Command Center</h1>
+        </div>
+        <button id="adminLogoutBtn" class="secondary-btn">Logout</button>
+      </div>
+
+      <section class="mt-8 grid gap-6 md:grid-cols-4">
+        <article class="dashboard-card"><p>Total Donors</p><h3 id="adminDonors">0</h3></article>
+        <article class="dashboard-card"><p>Total Patients</p><h3 id="adminPatients">0</h3></article>
+        <article class="dashboard-card"><p>Active Requests</p><h3 id="adminRequests">0</h3></article>
+        <article class="dashboard-card"><p>Lives Saved</p><h3 id="adminLivesSaved">0</h3></article>
+      </section>
+
+      <section class="mt-8 grid gap-6 xl:grid-cols-[1fr_1fr]">
+        <div class="space-y-6">
+          <div class="glass-card p-6">
+            <h2 class="text-2xl font-bold">Broadcast Notification</h2>
+            <form id="broadcastForm" class="mt-5 grid gap-4">
+              <textarea class="input-field min-h-[120px]" name="message" placeholder="Send alert to all donors and patients" required></textarea>
+              <button class="primary-btn" type="submit">Broadcast Alert</button>
+            </form>
+          </div>
+          <div class="glass-card p-6">
+            <h2 class="text-2xl font-bold">Donation Trends</h2>
+            <div id="donationTrendChart" class="mt-5 space-y-3"></div>
+          </div>
+          <div class="glass-card p-6">
+            <h2 class="text-2xl font-bold">Most Needed Blood Groups</h2>
+            <div id="mostNeededList" class="mt-5 space-y-3"></div>
+          </div>
+        </div>
+
+        <div class="space-y-6">
+          <div class="glass-card p-6">
+            <h2 class="text-2xl font-bold">Manage Users</h2>
+            <div id="userTable" class="mt-5 space-y-3"></div>
+          </div>
+          <div class="glass-card p-6">
+            <div class="flex items-center justify-between gap-3">
+              <h2 class="text-2xl font-bold">Monitor Requests</h2>
+              <button id="exportRequestsBtn" class="secondary-btn">Export CSV</button>
+            </div>
+            <div id="adminRequestTable" class="mt-5 space-y-3"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <script src="/assets/js/app.js?v=10"></script>
+    <script src="/assets/js/admin.js?v=11"></script>
+  </body>
+</html>

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Page</title>
+</head>
+<body>
+    <h1>Test Page - JavaScript Working?</h1>
+    <button onclick="testClick()">Click Me</button>
+    <p id="result">Result will appear here</p>
+    
+    <script>
+        alert("TEST: JavaScript is loaded!");
+        
+        function testClick() {
+            alert("TEST: Button clicked!");
+            document.getElementById("result").textContent = "Button was clicked at " + new Date();
+        }
+    </script>
+</body>
+</html>

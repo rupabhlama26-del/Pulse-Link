@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Select Role | PulseLink</title>
+    <script>
+      (function () {
+        if (window.location.protocol !== "file:") return;
+        const appPath = window.location.pathname.replace(/^.*\/public/, "") || "/select-role.html";
+        const nextUrl = `http://localhost:4500${appPath}${window.location.search}${window.location.hash}`;
+        window.location.replace(nextUrl);
+      })();
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="./assets/css/styles.css" />
+  </head>
+  <body class="page-shell min-h-screen bg-slate-950 text-white">
+    <main class="mx-auto grid min-h-screen max-w-6xl place-items-center px-6 py-16">
+      <section class="w-full">
+        <p class="section-label text-center">Choose your role</p>
+        <h1 class="mt-3 text-center text-5xl font-black">Who are you today?</h1>
+        <div class="mt-12 grid gap-6 md:grid-cols-2">
+          <a href="./auth.html?role=donor" class="role-card">
+            <span class="text-5xl">🩸</span>
+            <h2>I am a Donor</h2>
+            <p>Manage your eligibility, donations, alerts, and matching requests.</p>
+          </a>
+          <a href="./auth.html?role=patient" class="role-card">
+            <span class="text-5xl">🏥</span>
+            <h2>I need Blood</h2>
+            <p>Search matching donors, create emergency requests, and track your status.</p>
+          </a>
+        </div>
+        <div class="mt-8 text-center">
+          <a href="./admin-login.html" class="text-sm text-red-100 underline underline-offset-4">Admin Login</a>
+        </div>
+      </section>
+    </main>
+    <script src="./assets/js/app.js"></script>
+  </body>
+</html>

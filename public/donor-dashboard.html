@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <title>Donor Dashboard | PulseLink</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/assets/css/styles.css" />
+  </head>
+  <body class="page-shell bg-slate-950 text-white">
+    <main class="mx-auto max-w-7xl px-6 py-10">
+      <div class="dashboard-topbar">
+        <div>
+          <p class="section-label">Donor panel</p>
+          <h1 id="donorWelcome" class="mt-2 text-4xl font-black">Welcome back</h1>
+        </div>
+        <div class="flex gap-3">
+          <button id="toggleAvailabilityBtn" class="primary-btn">Toggle Availability</button>
+          <button id="logoutBtn" class="secondary-btn">Logout</button>
+        </div>
+      </div>
+
+      <section class="mt-8 grid gap-6 lg:grid-cols-4">
+        <article class="dashboard-card"><p>Status</p><h3 id="eligibilityStatus">--</h3></article>
+        <article class="dashboard-card"><p>Message</p><h3 id="eligibilityMessage">--</h3></article>
+        <article class="dashboard-card"><p>Last Donation</p><h3 id="lastDonationDate">--</h3></article>
+        <article class="dashboard-card"><p>Next Eligible</p><h3 id="nextEligibleDate">--</h3></article>
+      </section>
+
+      <section class="mt-8 grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
+        <div class="space-y-6">
+          <div class="glass-card p-6">
+            <div class="mb-5 flex items-center justify-between">
+              <h2 class="text-2xl font-bold">Profile Management</h2>
+              <button id="refreshDonorBtn" class="secondary-btn">Refresh</button>
+            </div>
+            <form id="donorProfileForm" class="grid gap-4 md:grid-cols-2">
+              <input class="input-field" name="name" placeholder="Full Name" />
+              <input class="input-field" name="phone" placeholder="Phone Number" />
+              <input class="input-field" name="age" type="number" placeholder="Age" />
+              <input class="input-field" name="weight" type="number" placeholder="Weight" />
+              <select class="input-field" name="blood_group">
+                <option>A+</option><option>A-</option><option>B+</option><option>B-</option>
+                <option>AB+</option><option>AB-</option><option>O+</option><option>O-</option>
+              </select>
+              <input class="input-field" name="last_donation_date" type="date" />
+              <input class="input-field md:col-span-2" name="address" placeholder="Address" />
+              <textarea class="input-field md:col-span-2 min-h-[100px]" name="health_conditions" placeholder="Medical History"></textarea>
+              <button class="primary-btn md:col-span-2" type="submit">Save Profile</button>
+            </form>
+          </div>
+
+          <div class="glass-card p-6">
+            <div class="mb-5 flex items-center justify-between">
+              <h2 class="text-2xl font-bold">Matching Patient Requests</h2>
+              <span class="rounded-full bg-red-500/10 px-3 py-1 text-xs text-red-100">Live</span>
+            </div>
+            <div id="nearbyRequests" class="space-y-4"></div>
+          </div>
+        </div>
+
+        <div class="space-y-6">
+          <div class="glass-card p-6">
+            <h2 class="text-2xl font-bold">Donation History</h2>
+            <form id="donationHistoryForm" class="mt-5 grid gap-4">
+              <input class="input-field" name="donation_date" type="date" required />
+              <input class="input-field" name="donation_location" placeholder="Donation Location" required />
+              <button class="primary-btn" type="submit">Add Donation</button>
+            </form>
+            <div id="donationHistory" class="mt-5 space-y-3"></div>
+          </div>
+
+          <div class="glass-card p-6">
+            <h2 class="text-2xl font-bold">Live Notifications</h2>
+            <div id="donorNotifications" class="mt-5 space-y-3"></div>
+          </div>
+
+          <div class="glass-card p-6">
+            <h2 class="text-2xl font-bold">Chat With Patient</h2>
+            <form id="donorChatForm" class="mt-5 grid gap-4">
+              <input class="input-field" name="request_id" type="number" placeholder="Request ID" required />
+              <textarea class="input-field min-h-[100px]" name="message" placeholder="Type your message" required></textarea>
+              <button class="primary-btn" type="submit">Send Message</button>
+            </form>
+            <button id="loadDonorChatBtn" class="secondary-btn mt-4">Load Chat</button>
+            <div id="donorChatMessages" class="mt-5 space-y-3"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <script src="/assets/js/app.js?v=10"></script>
+    <script src="/assets/js/donor.js?v=12"></script>
+  </body>
+</html>

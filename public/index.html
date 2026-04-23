@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <title>PulseLink Blood Bank</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              blood: "#e53935",
+              ink: "#07111f",
+              card: "rgba(255,255,255,0.08)"
+            },
+            boxShadow: {
+              glow: "0 20px 80px rgba(229, 57, 53, 0.25)"
+            }
+          }
+        }
+      };
+    </script>
+    <link rel="stylesheet" href="/assets/css/styles.css" />
+  </head>
+  <body class="bg-slate-950 text-white">
+    <div class="page-shell">
+      <header class="border-b border-white/10 backdrop-blur-xl">
+        <nav class="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
+          <a href="/" class="flex items-center gap-3 text-2xl font-bold tracking-wide">
+            <span class="grid h-11 w-11 place-items-center rounded-2xl bg-blood shadow-glow">+</span>
+            PulseLink
+          </a>
+          <div class="flex items-center gap-3">
+            <button id="langToggle" class="rounded-full border border-white/15 px-4 py-2 text-sm">EN / HI</button>
+            <button id="themeToggle" class="rounded-full border border-white/15 px-4 py-2 text-sm">Dark Mode</button>
+            <a href="/select-role.html" class="rounded-full bg-white px-5 py-2 text-sm font-semibold text-slate-900">Get Started</a>
+          </div>
+        </nav>
+      </header>
+
+      <main>
+        <section class="hero-grid mx-auto grid max-w-7xl gap-10 px-6 py-16 lg:grid-cols-[1.15fr_0.85fr] lg:py-24">
+          <div>
+            <span class="mb-5 inline-flex rounded-full border border-blood/40 bg-blood/10 px-4 py-2 text-sm text-red-100">
+              Live blood matching and emergency response
+            </span>
+            <h1 class="max-w-3xl text-5xl font-black leading-tight md:text-6xl">
+              Faster blood access when every minute matters.
+            </h1>
+            <p class="mt-6 max-w-2xl text-lg text-slate-300">
+              PulseLink connects eligible donors and patients using live availability, smart ranking, secure medical records, and emergency alerts.
+            </p>
+            <div class="mt-8 flex flex-wrap gap-4">
+              <a href="/auth.html?role=patient" class="rounded-full bg-blood px-7 py-4 font-semibold text-white shadow-glow">Find Blood Now</a>
+              <a href="/auth.html?role=donor" class="rounded-full border border-white/15 px-7 py-4 font-semibold">Become a Donor</a>
+              <button id="emergencyCTA" class="rounded-full border border-red-400/50 bg-red-500/10 px-7 py-4 font-semibold text-red-100">Emergency Request</button>
+            </div>
+            <div class="mt-10 grid gap-4 sm:grid-cols-3">
+              <article class="glass-card p-5">
+                <p class="text-sm text-slate-300">Total Donors</p>
+                <h3 id="totalDonors" class="mt-3 text-3xl font-bold">0</h3>
+              </article>
+              <article class="glass-card p-5">
+                <p class="text-sm text-slate-300">Lives Saved</p>
+                <h3 id="livesSaved" class="mt-3 text-3xl font-bold">0</h3>
+              </article>
+              <article class="glass-card p-5">
+                <p class="text-sm text-slate-300">Active Requests</p>
+                <h3 id="activeRequests" class="mt-3 text-3xl font-bold">0</h3>
+              </article>
+            </div>
+          </div>
+
+          <div class="glass-card overflow-hidden p-6">
+            <div class="mb-6 flex items-center justify-between">
+              <h2 class="text-2xl font-bold">Blood Group Availability</h2>
+              <span class="rounded-full bg-white/10 px-3 py-1 text-xs uppercase tracking-[0.25em]">Live</span>
+            </div>
+            <div id="availabilityChart" class="space-y-4"></div>
+            <div id="landingDataMessage" class="mt-4 hidden rounded-2xl border border-red-400/20 bg-red-500/10 px-4 py-3 text-sm text-red-100"></div>
+          </div>
+        </section>
+
+        <section class="mx-auto grid max-w-7xl gap-6 px-6 pb-10 lg:grid-cols-3">
+          <article class="feature-panel">
+            <h3>Eligibility Checker</h3>
+            <p>90-day donation gap, weight and age verification, next eligible date, and donation history tracking.</p>
+          </article>
+          <article class="feature-panel">
+            <h3>Emergency Broadcast</h3>
+            <p>Matching donors get alerts instantly for urgent requests using live in-app notification streaming.</p>
+          </article>
+          <article class="feature-panel">
+            <h3>Smart Recommendation</h3>
+            <p>Rank donors using blood group match, availability, and donation reliability score.</p>
+          </article>
+        </section>
+
+        <section class="mx-auto max-w-7xl px-6 py-12">
+          <div class="mb-8 flex items-end justify-between">
+            <div>
+              <p class="section-label">Why this system matters</p>
+              <h2 class="mt-2 text-4xl font-bold">Built for emergency response and safer donations</h2>
+            </div>
+          </div>
+          <div class="grid gap-6 lg:grid-cols-3">
+            <div class="story-card">
+              <h3>Fast Matching</h3>
+              <p>Patients can quickly find eligible donors by blood group and current availability.</p>
+            </div>
+            <div class="story-card">
+              <h3>Medical Safety First</h3>
+              <p>Eligibility status updates automatically using the donor’s age, weight, health notes, and last donation date.</p>
+            </div>
+            <div class="story-card">
+              <h3>Multi-role Control</h3>
+              <p>Admin users monitor requests, manage people, analyze trends, and broadcast urgent announcements.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="mx-auto max-w-7xl px-6 py-12">
+          <div class="glass-card p-8">
+            <p class="section-label">Testimonials</p>
+            <div class="mt-6 grid gap-6 md:grid-cols-3">
+              <blockquote class="testimonial-card">“The donor search helped us find blood within minutes for my father’s surgery.”</blockquote>
+              <blockquote class="testimonial-card">“As a donor, the eligibility reminder and alerts make it easy to help responsibly.”</blockquote>
+              <blockquote class="testimonial-card">“The dashboard gave our admin team clear visibility of active emergency requests.”</blockquote>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="border-t border-white/10 px-6 py-8 text-sm text-slate-400">
+        <div class="mx-auto flex max-w-7xl flex-col gap-3 md:flex-row md:items-center md:justify-between">
+          <p>PulseLink Blood Bank Management System</p>
+          <p>Email: support@pulselink.local | Phone: +91 98765 43210</p>
+        </div>
+      </footer>
+    </div>
+
+    <script>
+      window.addEventListener("DOMContentLoaded", async () => {
+        const params = ["totalDonors", "livesSaved", "activeRequests"];
+        const messageBox = document.getElementById("landingDataMessage");
+
+        try {
+          const [statsResponse, availabilityResponse] = await Promise.all([
+            fetch("/api/meta/stats"),
+            fetch("/api/meta/blood-availability")
+          ]);
+
+          const statsData = await statsResponse.json();
+          const availabilityData = await availabilityResponse.json();
+
+          if (!statsResponse.ok || !availabilityResponse.ok) {
+            throw new Error("Unable to load live homepage data.");
+          }
+
+          document.getElementById("totalDonors").textContent = statsData.stats.totalDonors ?? 0;
+          document.getElementById("livesSaved").textContent = statsData.stats.livesSaved ?? 0;
+          document.getElementById("activeRequests").textContent = statsData.stats.activeRequests ?? 0;
+
+          const chart = document.getElementById("availabilityChart");
+          const rows = availabilityData.availability || [];
+          const max = Math.max(...rows.map((item) => item.available_count), 1);
+
+          chart.innerHTML = rows.length ? rows.map((item) => `
+            <div class="availability-row fade-in">
+              <div class="flex items-center justify-between text-sm">
+                <span>${item.blood_group}</span>
+                <span>${item.available_count} donors</span>
+              </div>
+              <div class="availability-bar">
+                <span style="width:${(item.available_count / max) * 100}%"></span>
+              </div>
+            </div>
+          `).join("") : `<div class="item-card"><p>No live availability found yet.</p></div>`;
+
+          messageBox.classList.add("hidden");
+        } catch (error) {
+          params.forEach((id) => {
+            const element = document.getElementById(id);
+            if (element) element.textContent = "0";
+          });
+          document.getElementById("availabilityChart").innerHTML = `<div class="item-card"><p>Could not load availability right now.</p></div>`;
+          messageBox.textContent = error.message;
+          messageBox.classList.remove("hidden");
+        }
+      });
+    </script>
+    <script src="/assets/js/app.js?v=10"></script>
+    <script src="/assets/js/landing.js?v=11"></script>
+  </body>
+</html>

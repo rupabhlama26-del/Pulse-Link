@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <title>Patient Dashboard | PulseLink</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/assets/css/styles.css" />
+  </head>
+  <body class="page-shell bg-slate-950 text-white">
+    <main class="mx-auto max-w-7xl px-6 py-10">
+      <div class="dashboard-topbar">
+        <div>
+          <p class="section-label">Patient panel</p>
+          <h1 id="patientWelcome" class="mt-2 text-4xl font-black">Blood search dashboard</h1>
+        </div>
+        <div class="flex gap-3">
+          <button id="voiceSearchBtn" class="secondary-btn">Voice Search</button>
+          <button id="patientLogoutBtn" class="secondary-btn">Logout</button>
+        </div>
+      </div>
+
+      <section class="mt-8 grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
+        <div class="space-y-6">
+          <div class="glass-card p-6">
+            <div class="mb-5 flex items-center justify-between">
+              <h2 class="text-2xl font-bold">Search Matching Donors</h2>
+              <button id="refreshSearchBtn" class="secondary-btn">Refresh</button>
+            </div>
+            <form id="searchForm" class="grid gap-4 md:grid-cols-[1fr_auto]">
+              <select class="input-field" name="bloodGroup" required>
+                <option value="">Blood Group</option>
+                <option>A+</option><option>A-</option><option>B+</option><option>B-</option>
+                <option>AB+</option><option>AB-</option><option>O+</option><option>O-</option>
+              </select>
+              <button class="primary-btn" type="submit">Search</button>
+            </form>
+            <div id="searchResults" class="mt-6 grid gap-4"></div>
+          </div>
+
+          <div class="glass-card p-6">
+            <div class="mb-5 flex items-center justify-between">
+              <h2 class="text-2xl font-bold">Request Blood</h2>
+              <button id="emergencyModeBtn" class="rounded-full border border-red-400/40 bg-red-500/10 px-4 py-2 text-sm text-red-100">Emergency Mode</button>
+            </div>
+            <form id="requestForm" class="grid gap-4 md:grid-cols-2">
+              <select class="input-field" name="blood_group" required>
+                <option value="">Required Blood Group</option>
+                <option>A+</option><option>A-</option><option>B+</option><option>B-</option>
+                <option>AB+</option><option>AB-</option><option>O+</option><option>O-</option>
+              </select>
+              <input class="input-field" type="number" name="units_needed" min="1" placeholder="Units Needed" required />
+              <select class="input-field" name="urgency" required>
+                <option value="">Urgency</option>
+                <option>Low</option>
+                <option>Medium</option>
+                <option>High</option>
+                <option>Critical</option>
+              </select>
+              <input class="input-field" type="text" name="hospital_location" placeholder="Hospital Location" required />
+              <textarea class="input-field md:col-span-2 min-h-[100px]" name="notes" placeholder="Notes"></textarea>
+              <button class="primary-btn md:col-span-2" type="submit">Send Request</button>
+            </form>
+          </div>
+        </div>
+
+        <div class="space-y-6">
+          <div class="glass-card p-6">
+            <h2 class="text-2xl font-bold">Request Status</h2>
+            <div id="patientRequests" class="mt-5 space-y-3"></div>
+          </div>
+          <div class="glass-card p-6">
+            <h2 class="text-2xl font-bold">Notifications</h2>
+            <div id="patientNotifications" class="mt-5 space-y-3"></div>
+          </div>
+          <div class="glass-card p-6">
+            <h2 class="text-2xl font-bold">Chat With Donor</h2>
+            <form id="patientChatForm" class="mt-5 grid gap-4">
+              <input class="input-field" name="request_id" type="number" placeholder="Request ID" required />
+              <textarea class="input-field min-h-[100px]" name="message" placeholder="Type your message" required></textarea>
+              <button class="primary-btn" type="submit">Send Message</button>
+            </form>
+            <button id="loadPatientChatBtn" class="secondary-btn mt-4">Load Chat</button>
+            <div id="patientChatMessages" class="mt-5 space-y-3"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <script src="/assets/js/app.js?v=10"></script>
+    <script src="/assets/js/patient.js?v=11"></script>
+  </body>
+</html>
